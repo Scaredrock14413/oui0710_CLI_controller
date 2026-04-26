@@ -92,11 +92,13 @@ def log(msg):
     os.makedirs('logs', exist_ok=True)
     with open(f"{os.path.dirname(os.path.abspath(__file__))}/logs/{start_time}.txt", 'a', encoding='utf-8') as f:
         f.write(msg + '\n')
+        f.flush()
 
 def start_log(name, msg):
     os.makedirs('logs', exist_ok=True)
     with open(f"{os.path.dirname(os.path.abspath(__file__))}/logs/{start_time}_{name}.txt", 'a', encoding='utf-8') as f:
         f.write(msg + '\n')
+        f.flush()
     log(msg)
 
 log('CLI控制端啟動成功')
@@ -120,6 +122,8 @@ def start_command_thread(content, cwd):
             text=True,
             bufsize=1,
             universal_newlines=True,
+            encoding='utf-8',
+            errors='ignore',
         )
         # 保存進程引用
         running_processes[name] = process
@@ -155,8 +159,9 @@ def log_window():
     scrollbar_win.config(command=log_text_win.yview)
 
     def update_log_window():
-        with open(f"logs/{start_time}.txt", 'r', encoding='utf-8') as f:
-            content = f.read()
+        if not log_win.winfo_exists():
+            return
+        content = log_text.get(1.0, tk.END).strip()
         log_text_win.config(state='normal')
         log_text_win.delete(1.0, tk.END)
         log_text_win.insert(tk.END, content)
