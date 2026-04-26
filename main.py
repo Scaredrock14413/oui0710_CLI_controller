@@ -90,14 +90,12 @@ def log(msg):
     log_text.see(tk.END)  # 自動捲動
     log_text.config(state='disabled')
     os.makedirs('logs', exist_ok=True)
-
-    with open(f"logs/{start_time}.txt", 'a', encoding='utf-8') as f:
+    with open(f"{os.path.dirname(os.path.abspath(__file__))}/logs/{start_time}.txt", 'a', encoding='utf-8') as f:
         f.write(msg + '\n')
 
 def start_log(name, msg):
     os.makedirs('logs', exist_ok=True)
-    os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    with open(f"logs/{start_time}_{name}.txt", 'a', encoding='utf-8') as f:
+    with open(f"{os.path.dirname(os.path.abspath(__file__))}/logs/{start_time}_{name}.txt", 'a', encoding='utf-8') as f:
         f.write(msg + '\n')
     log(msg)
 
